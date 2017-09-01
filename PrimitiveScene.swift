@@ -21,28 +21,33 @@ class PrimitiveScene: SCNScene {
 		//variables
 		var y: Float = 0.0
 		let radius: CGFloat = 0.1
-		let xCount = 20
-		let yCount = 20
-		//create 20 spheres in for loop using an index
+		let xCount = 7
+		let yCount = 7
+		let zCount = 7
+		
 		for row in 0..<yCount {
-			var x: Float = Float(radius) * Float(row)
-			for column in row..<xCount {
-				let sphere = SCNSphere(radius: radius)
-				//color spheres based on row/column
-				if ((row + column) % 2 == 0) {
-					sphere.firstMaterial?.diffuse.contents = UIColor.green
-				} else {
-					sphere.firstMaterial?.diffuse.contents = UIColor.red
+			var z: Float = 0.0
+			for _ in 0..<zCount {
+				var x: Float = 0.0
+				for column in 0..<xCount {
+					let sphere = SCNSphere(radius: radius)
+					//color spheres based on row/column
+					if ((row + column) % 2 == 0) {
+						sphere.firstMaterial?.diffuse.contents = UIColor.green
+					} else {
+						sphere.firstMaterial?.diffuse.contents = UIColor.red
+					}
+					//set node and position
+					let sphereNode = SCNNode(geometry: sphere)
+					sphereNode.position = SCNVector3(x: x, y: y, z: z)
+					//add node to scene
+					self.rootNode.addChildNode(sphereNode)
+					//distance b/w spheres
+					x += Float(radius)*2
 				}
-				//set node and position
-				let sphereNode = SCNNode(geometry: sphere)
-				sphereNode.position = SCNVector3(x: x, y: y, z: 0)
-				//add node to scene
-				self.rootNode.addChildNode(sphereNode)
-				//distance b/w spheres
-				x += Float(radius)*2
+				z += Float(radius)*2
 			}
-			y += sqrt(3) * Float(radius)
+			y += Float(radius)*2
 		}
 	}
 	//init w/ coder method
