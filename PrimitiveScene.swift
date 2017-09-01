@@ -4,11 +4,10 @@
 //  Copyright © 2017 Jacob Dobson. All rights reserved.
 
 /*
-	-- Make a triangle out of spheres
-	-- Make the spheres tangent to each other
-
-	* Hint * Increase the y-coordinate at each step sqrt(3) --> height of equilateral triangle
-		https://camo.githubusercontent.com/76f62e282f21730fb94f178acb9443957d42e052/687474703a2f2f7777772e7765686561727473776966742e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031342f31302f657175696c61746572616c2d747269616e676c652e706e67
+	-- Make a 7x7x7 cube out of spheres
+	-- Alternate each level of the cube with red and green
+	
+	BONUS: Don’t add any spheres inside the cube
 */
 
 import UIKit
@@ -18,36 +17,32 @@ class PrimitiveScene: SCNScene {
 	//initialize contents of scene
 	override init() {
 		super.init()
-		//variables
-		var y: Float = 0.0
-		let radius: CGFloat = 0.1
-		let xCount = 7
-		let yCount = 7
-		let zCount = 7
-		
-		for row in 0..<yCount {
-			var z: Float = 0.0
-			for _ in 0..<zCount {
-				var x: Float = 0.0
-				for column in 0..<xCount {
-					let sphere = SCNSphere(radius: radius)
-					//color spheres based on row/column
-					if ((row + column) % 2 == 0) {
-						sphere.firstMaterial?.diffuse.contents = UIColor.green
-					} else {
-						sphere.firstMaterial?.diffuse.contents = UIColor.red
-					}
-					//set node and position
-					let sphereNode = SCNNode(geometry: sphere)
-					sphereNode.position = SCNVector3(x: x, y: y, z: z)
-					//add node to scene
-					self.rootNode.addChildNode(sphereNode)
-					//distance b/w spheres
-					x += Float(radius)*2
-				}
-				z += Float(radius)*2
-			}
-			y += Float(radius)*2
+		//array of primitives/geometries
+		var geometries = [SCNSphere(radius: 2),
+		                  SCNPlane(width: 1.0, height: 1.5),
+		                  SCNBox(width: 1.0, height: 1.5, length: 2.0, chamferRadius: 0.0),
+		                  SCNPyramid(width: 2.0, height: 1.5, length: 1.0),
+		                  SCNCylinder(radius: 1.0, height: 1.5),
+		                  SCNCone(topRadius: 0.5, bottomRadius: 1.0, height: 1.5),
+		                  SCNTorus(ringRadius: 1.0, pipeRadius: 0.2),
+		                  SCNTube(innerRadius: 0.5, outerRadius: 1.0, height: 1.5),
+		                  SCNCapsule(capRadius: 0.5, height: 2.0)]
+		//setup x to move items along x-axis easily with each iteration
+		var x: Float = 0.0
+		//iterate thru geometries array
+		for i in 0..<geometries.count {
+			//create diff colors based on index
+			let hue: CGFloat = CGFloat(i) / CGFloat(geometries.count)
+			let color = UIColor(hue: hue, saturation: 1, brightness: 1, alpha: 1)
+			//create new node for each geometry
+			let geometry = geometries[i]
+			geometry.firstMaterial?.diffuse.contents = color
+			let node = SCNNode(geometry: geometry)
+			node.position = SCNVector3(x: x, y: 0, z: 0)
+			//add node to scene
+			self.rootNode.addChildNode(node)
+			//move each node by 2.5 on the x-axis
+			x += 2.5
 		}
 	}
 	//init w/ coder method

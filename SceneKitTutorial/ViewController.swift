@@ -16,7 +16,7 @@ class ViewController: UIViewController {
 		//setup scn
 		let scnView = self.view as! SCNView
 		scnView.scene = PrimitiveScene()
-		scnView.backgroundColor = UIColor.purple
+		scnView.backgroundColor = UIColor.black
 		//add light to scn
 		scnView.autoenablesDefaultLighting = true
 		//allow cam control
