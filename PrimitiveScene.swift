@@ -4,7 +4,7 @@
 //  Copyright © 2017 Jacob Dobson. All rights reserved.
 
 /*
-	Animate each primitive around the campfire forever with each synchronously alternating its direction of movement
+Place a floor below the primitives
 */
 
 import UIKit
@@ -26,6 +26,11 @@ class PrimitiveScene: SCNScene {
 		                  SCNCapsule(capRadius: 0.5, height: 2.0)]
 		//make plane visible on both sides
 		geometries[1].firstMaterial?.isDoubleSided = true
+		//create/add floor to scene
+		let floor = SCNFloor()
+		let floorNode = SCNNode(geometry: floor)
+		floorNode.position.y = -2
+		self.rootNode.addChildNode(floorNode)
 		//setup position of primitives
 		var angle: Float = 0.0
 		let radius: Float = 4.0
