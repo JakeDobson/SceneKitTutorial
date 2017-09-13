@@ -4,10 +4,7 @@
 //  Copyright © 2017 Jacob Dobson. All rights reserved.
 
 /*
-	We’ll be using polar coordinates to arrange our primitives in the XZ plane.
-	A radius of 4 is great for nicely arranging the primitives.
-	We’ll be starting the angle off at 0 and incrementing it by 2π / geometries.count so that the primitives are positioned uniform along the circle.
-	We have to convert from polar coordinates to x,z coordinates when actually setting the position of the primitive.
+	Animate each primitive around the campfire forever with each synchronously alternating its direction of movement
 */
 
 import UIKit
@@ -49,6 +46,13 @@ class PrimitiveScene: SCNScene {
 			self.rootNode.addChildNode(node)
 			//move each node by angleIncrement
 			angle += angleIncrement
+			//animation sequence
+			let sign:CGFloat = i % 2 == 0 ? 1.0 : -1.0
+			let moveIfEven = SCNAction.moveBy(x: 0.0, y: sign * CGFloat(1.0), z: 0.0, duration: 1.0)
+			let moveIfOdd = SCNAction.moveBy(x: 0.0, y: sign * CGFloat(-1.0), z: 0.0, duration: 1.0)
+			let sequence = SCNAction.sequence([moveIfEven, moveIfOdd])
+			let repeatedSequence = SCNAction.repeatForever(sequence)
+			node.runAction(repeatedSequence)
 		}
 	}
 	//init w/ coder method
