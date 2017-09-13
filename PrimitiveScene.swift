@@ -27,6 +27,7 @@ class PrimitiveScene: SCNScene {
 		                  SCNTorus(ringRadius: 1.0, pipeRadius: 0.2),
 		                  SCNTube(innerRadius: 0.5, outerRadius: 1.0, height: 1.5),
 		                  SCNCapsule(capRadius: 0.5, height: 2.0)]
+		//make plane visible on both sides
 		geometries[1].firstMaterial?.isDoubleSided = true
 		//setup x to move items along x-axis easily with each iteration
 		var x: Float = 0.0
