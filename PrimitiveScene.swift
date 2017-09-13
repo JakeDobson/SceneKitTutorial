@@ -4,7 +4,7 @@
 //  Copyright © 2017 Jacob Dobson. All rights reserved.
 
 /*
-Place a floor below the primitives
+	Organize the primitives in a spiral
 */
 
 import UIKit
@@ -26,38 +26,30 @@ class PrimitiveScene: SCNScene {
 		                  SCNCapsule(capRadius: 0.5, height: 2.0)]
 		//make plane visible on both sides
 		geometries[1].firstMaterial?.isDoubleSided = true
-		//create/add floor to scene
-		let floor = SCNFloor()
-		let floorNode = SCNNode(geometry: floor)
-		floorNode.position.y = -2
-		self.rootNode.addChildNode(floorNode)
 		//setup position of primitives
 		var angle: Float = 0.0
-		let radius: Float = 4.0
-		let angleIncrement: Float = .pi * 2.0 / Float(geometries.count)
+		let radius: Float = 2.0
+		let angleIncrement: Float = .pi * 4.0 / Float(geometries.count)// * 4.0 to go around unit circle twice
+		var y: Float = 0.0
 		//iterate thru geometries array
 		for i in 0..<geometries.count {
 			//create diff colors based on index
 			let hue: CGFloat = CGFloat(i) / CGFloat(geometries.count)
 			let color = UIColor(hue: hue, saturation: 1, brightness: 1, alpha: 1)
+			//increase y to induce spiral position
 			//create new node for each geometry
 			let geometry = geometries[i]
 			geometry.firstMaterial?.diffuse.contents = color
 			let node = SCNNode(geometry: geometry)
+			//setup/position node
 			let x = radius * cos(angle)
 			let z = radius * sin(angle)
-			node.position = SCNVector3(x: x, y: 0, z: z)
+			node.position = SCNVector3(x: x, y: y, z: z)
 			//add node to scene
 			self.rootNode.addChildNode(node)
 			//move each node by angleIncrement
 			angle += angleIncrement
-			//animation sequence
-			let sign:CGFloat = i % 2 == 0 ? 1.0 : -1.0
-			let moveIfEven = SCNAction.moveBy(x: 0.0, y: sign * CGFloat(1.0), z: 0.0, duration: 1.0)
-			let moveIfOdd = SCNAction.moveBy(x: 0.0, y: sign * CGFloat(-1.0), z: 0.0, duration: 1.0)
-			let sequence = SCNAction.sequence([moveIfEven, moveIfOdd])
-			let repeatedSequence = SCNAction.repeatForever(sequence)
-			node.runAction(repeatedSequence)
+			y += 1.5
 		}
 	}
 	//init w/ coder method
