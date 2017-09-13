@@ -14,15 +14,17 @@ class PrimitiveScene: SCNScene {
 	//initialize contents of scene
 	override init() {
 		super.init()
-		let sphere = SCNSphere(radius: 0.2)
+		//setup sphere and add to scene
+		let sphere = SCNSphere(radius: 0.002)
 		sphere.firstMaterial?.diffuse.contents = UIColor.purple
-		
 		let sphereNode = SCNNode(geometry: sphere)
-		
 		self.rootNode.addChildNode(sphereNode)
 		
-		let moveUp = SCNAction.moveBy(x: 0.0, y: 0.2, z: 0.0, duration: 1.0)
-		sphereNode.runAction(moveUp)
+		let moveUp = SCNAction.moveBy(x: 0, y: 0.002, z: 0, duration: 1)
+		let moveDown = SCNAction.moveBy(x: 0, y: -0.002, z: 0, duration: 1)
+		let sequence = SCNAction.sequence([moveUp, moveDown])
+		let sequenceForever = SCNAction.repeatForever(sequence)
+		sphereNode.runAction(sequenceForever)
 	}
 	//init w/ coder method
 	required init(coder aDecoder: NSCoder) {
